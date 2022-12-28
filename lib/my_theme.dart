@@ -38,8 +38,12 @@ class MyThemeData {
             fontSize: 18,
             color: colorBrightGreen,
           )),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: colorLightBlue,
+      ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: colorWhite,
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
           selectedItemColor: colorLightBlue,
           unselectedItemColor: Colors.grey));
 
