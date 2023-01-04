@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_own/layout/add_task_bottom_sheet.dart';
 import 'package:todo_own/layout/home_provider.dart';
+import 'package:todo_own/layout/slidable_bottom_sheet.dart';
 import 'package:todo_own/modules/settings/settings.dart';
 import 'package:todo_own/modules/tasks/tasks_list.dart';
 import 'package:todo_own/shared/styles/colors.dart';
@@ -10,7 +11,7 @@ class HomeLayout extends StatelessWidget {
   static const String routeName = "Home Layout";
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext mainContext) {
     return ChangeNotifierProvider(
       create: (context) => HomeProvider(),
       builder: (context, child) {
@@ -24,7 +25,7 @@ class HomeLayout extends StatelessWidget {
           ),
           body: tabs[homeProvider.currentIndex],
           floatingActionButton: FloatingActionButton(
-              shape: StadiumBorder(
+              shape: const StadiumBorder(
                 side: BorderSide(
                   color: colorWhite,
                   width: 3,
@@ -33,20 +34,20 @@ class HomeLayout extends StatelessWidget {
               onPressed: () {
                 showAddTaskBottomSheet(context);
               },
-              child: Icon(
+              child: const Icon(
                 Icons.add,
                 color: colorWhite,
               )),
           bottomNavigationBar: BottomAppBar(
             notchMargin: 8,
-            shape: CircularNotchedRectangle(),
+            shape: const CircularNotchedRectangle(),
             child: BottomNavigationBar(
               currentIndex: homeProvider.currentIndex,
               onTap: (index) => homeProvider.changeCurrentIndex(index),
-              items: [
-                const BottomNavigationBarItem(
+              items: const [
+                BottomNavigationBarItem(
                     icon: Icon(Icons.list, size: 30), label: ''),
-                const BottomNavigationBarItem(
+                BottomNavigationBarItem(
                     icon: Icon(
                       Icons.settings,
                       size: 30,
@@ -60,13 +61,18 @@ class HomeLayout extends StatelessWidget {
     );
   }
 
-  List<Widget> tabs = [SettingsTab(), TasksListTab()];
+  List<Widget> tabs = [TasksListTab(), const SettingsTab()];
 
-  void showAddTaskBottomSheet(context) {
-    showModalBottomSheet(
-      context: context,
+  void showAddTaskBottomSheet(mainContext) async {
+    await showModalBottomSheet(
+      isScrollControlled: true,
+      context: mainContext,
       builder: (context) {
-        return AddTaskBottomSheet();
+        return Padding(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: AddTaskBottomSheet(),
+        );
       },
     );
   }
