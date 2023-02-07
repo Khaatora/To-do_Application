@@ -9,18 +9,21 @@ class MyThemeData {
     colorScheme: const ColorScheme(
         brightness: Brightness.light,
         primary: colorLightBlue,
-        onPrimary: colorGrey,
+        onPrimary: Colors.white,
         secondary: colorWhite,
         onSecondary: colorLightBlue,
         error: Colors.red,
         onError: colorWhite,
         background: colorBrightGreen,
         onBackground: colorLightGreen,
-        surface: colorGrey,
-        onSurface: colorGrey),
+        surface: Colors.white,
+        onSurface: colorLightBlue),
     appBarTheme: const AppBarTheme(
         backgroundColor: colorLightBlue,
         iconTheme: IconThemeData(color: colorWhite)),
+    timePickerTheme: const TimePickerThemeData(
+      helpTextStyle: TextStyle(color: colorLightBlue),
+    ),
     textTheme: const TextTheme(
         //use headlines for appbar titles or stuff like that
         headline1: TextStyle(
@@ -29,9 +32,9 @@ class MyThemeData {
           color: colorWhite,
         ),
         //user subtitles for other texts like paragraph texts
-          subtitle1: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+        subtitle1: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
             color: colorLightBlue,
           ),
           subtitle2: TextStyle(
