@@ -1,11 +1,8 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:todo_own/layout/add_task_bottom_sheet.dart';
 import 'package:todo_own/models/task.dart';
-import 'package:todo_own/modules/tasks/tasks_list_provider.dart';
-import 'package:todo_own/shared/components/component.dart';
+import 'package:todo_own/shared/network/local/firebase_utils.dart';
 import 'package:todo_own/shared/styles/colors.dart';
 
 import 'task_item.dart';
@@ -40,10 +37,10 @@ class _TasksListTabState extends State<TasksListTab> {
             activeBackgroundDayColor: colorLightBlue,
             dotsColor: Colors.white,
             selectableDayPredicate: (date) => true,
-            locale: 'en',
+            locale: 'ar_EG',
           ),
           StreamBuilder<QuerySnapshot<TaskData>>(
-            stream: getTasksFromFirestore(selectedDate),
+            stream: getSelectedDateTasksFromFirestore(selectedDate),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Expanded(
