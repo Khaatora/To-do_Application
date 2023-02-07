@@ -5,7 +5,6 @@ import 'package:todo_own/shared/network/local/firebase_utils.dart';
 import 'package:todo_own/shared/styles/colors.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
-  AddTaskBottomSheet({Key? key}) : super(key: key);
 
   @override
   State<AddTaskBottomSheet> createState() => _AddTaskBottomSheetState();
@@ -16,28 +15,30 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   var descriptionController = TextEditingController();
 
   DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    var mediaQuery = MediaQuery.of(context);
     return Container(
-      height: MediaQuery.of(context).size.height * 0.5,
-      margin: EdgeInsets.symmetric(
-          horizontal: MediaQuery.of(context).size.width * 0.05),
+      padding: EdgeInsets.symmetric(
+          horizontal: mediaQuery.size.width * 0.05,
+          vertical: mediaQuery.size.height * 0.02),
       child: Form(
           key: formKey,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Text("Add New Task",
-                        style: Theme.of(context).textTheme.subtitle1)),
+                Text("Add New Task",
+                    style: Theme.of(context).textTheme.subtitle1),
+                const SizedBox(
+                  height: 15,
+                ),
                 //text form fields must be inside forms, they allow validation
                 TextFormField(
-                    autofocus: false,
                     controller: titleController,
                     validator: (value) {
                       if (value!.isEmpty) return "please enter title";
@@ -67,30 +68,67 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 const SizedBox(
                   height: 20,
                 ),
-                InkWell(
-                  onTap: () {
-                    showPicker(context);
-                  },
-                  child: Text(
-                    "Select Date",
-                    textAlign: TextAlign.left,
-                    style: Theme.of(context)
-                        .textTheme
-                        .subtitle1
-                        ?.copyWith(color: colorGrey),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            showDPicker(context);
+                          },
+                          child: Text(
+                            "Select Date",
+                            textAlign: TextAlign.left,
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1
+                                ?.copyWith(color: colorGrey),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            showDPicker(context);
+                          },
+                          child: Text(
+                              "${selectedDate.year}/${selectedDate.month}/${selectedDate.day}",
+                              style: Theme.of(context).textTheme.subtitle1,
+                              textAlign: TextAlign.center),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            showTPicker(context);
+                          },
+                          child: Text(
+                            "Select Time",
+                            textAlign: TextAlign.left,
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1
+                                ?.copyWith(color: colorGrey),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            showTPicker(context);
+                          },
+                          child: Text(selectedTime.format(context),
+                              style: Theme.of(context).textTheme.subtitle1,
+                              textAlign: TextAlign.center),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
                 const SizedBox(
-                  height: 5,
-                ),
-                InkWell(
-                  onTap: () {
-                    showPicker(context);
-                  },
-                  child: Text(
-                      "${selectedDate.year}/${selectedDate.month}/${selectedDate.day}",
-                      style: Theme.of(context).textTheme.subtitle1,
-                      textAlign: TextAlign.center),
+                  height: 20,
                 ),
                 ElevatedButton(
                     style: ButtonStyle(
@@ -99,24 +137,32 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     ),
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        FocusScope.of(context).unfocus();
+                        unFocusKeyboardFromScope();
                         TaskData taskData = TaskData(
                             title: titleController.text,
                             description: descriptionController.text,
                             date: DateUtils.dateOnly(selectedDate)
-                                .microsecondsSinceEpoch);
-                        showLoading(context, "Adding task, Please wait", false);
-                        addTaskToDatabase(taskData).then(
-                          (value) {
+                                .microsecondsSinceEpoch,
+                            time: TimeOfDay.fromDateTime(selectedDate)
+                                .format(context));
+                        showMessage(
+                          context,
+                          "Are you sure you want to continue?",
+                          "Yes",
+                          () {
+                            popNavigator(context);
+                            showLoading(
+                                context, "Adding task, Please wait", false);
+                            addTaskToDatabase(taskData);
                             hideLoading(context);
                             showMessage(
                                 context, "Task Added Successfully", "Ok", () {
                               popNavigator(context);
                             });
                           },
-                        ).catchError((error) {
-                          print(error);
-                        });
+                          negBtn: "cancel",
+                          negAction: () => popNavigator(context),
+                        );
                       }
                     },
                     child: Text(
@@ -133,14 +179,35 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     );
   }
 
-  void showPicker(BuildContext context) async {
+  //showDatePicker
+  void showDPicker(BuildContext context) async {
+    unFocusKeyboardFromScope();
     DateTime? chosenDate = await showDatePicker(
         context: context,
         initialDate: selectedDate,
         firstDate: DateTime.now(),
         lastDate: DateTime.now().add(const Duration(days: 365)));
     if (chosenDate == null) return;
-    selectedDate = chosenDate;
-    setState(() {});
+
+    setState(() {
+      selectedDate = chosenDate;
+    });
+  }
+
+  //showTimePicker
+  void showTPicker(BuildContext context) async {
+    unFocusKeyboardFromScope();
+    TimeOfDay? chosenTime = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    if (chosenTime == null) return;
+    setState(() {
+      selectedTime = chosenTime;
+    });
+  }
+
+  void unFocusKeyboardFromScope() {
+    FocusScope.of(context).unfocus();
   }
 }
