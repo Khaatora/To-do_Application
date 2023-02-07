@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_own/layout/add_task_bottom_sheet.dart';
 import 'package:todo_own/layout/home_provider.dart';
-import 'package:todo_own/layout/slidable_bottom_sheet.dart';
 import 'package:todo_own/modules/settings/settings.dart';
-import 'package:todo_own/modules/tasks/tasks_list.dart';
+import 'package:todo_own/modules/tasks/task_list/tasks_list.dart';
 import 'package:todo_own/shared/styles/colors.dart';
 
 class HomeLayout extends StatelessWidget {
@@ -61,7 +60,7 @@ class HomeLayout extends StatelessWidget {
     );
   }
 
-  List<Widget> tabs = [TasksListTab(), const SettingsTab()];
+  List<Widget> tabs = [TasksListTab(), SettingsTab()];
 
   void showAddTaskBottomSheet(mainContext) async {
     await showModalBottomSheet(
