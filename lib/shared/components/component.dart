@@ -1,7 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_own/models/task.dart';
-import 'package:todo_own/shared/network/local/firebase_utils.dart';
 
 showLoading(BuildContext context, String message, bool isBarrierDissmisible) {
   showDialog(
@@ -41,10 +38,16 @@ void showMessage(BuildContext context, String message, String posBtnText,
       List<Widget> Actions = [
         TextButton(onPressed: posAction, child: Text(posBtnText))
       ];
-      if (negBtn != null)
+      if (negBtn != null) {
         Actions.add(TextButton(onPressed: negAction, child: Text(negBtn)));
+      }
       return AlertDialog(
-        title: FittedBox(fit: BoxFit.fitHeight, child: Text(message)),
+        title: FittedBox(
+            fit: BoxFit.fitHeight,
+            child: Text(
+              message,
+              style: ThemeData().textTheme.subtitle1,
+            )),
         actions: Actions,
       );
     },
@@ -53,19 +56,4 @@ void showMessage(BuildContext context, String message, String posBtnText,
 
 void popNavigator(context) {
   Navigator.pop(context);
-}
-
-Stream<QuerySnapshot<TaskData>> getTasksFromFirestore(DateTime dateTime) {
-  return getTasksCollection()
-      .where('date',
-          isEqualTo: DateUtils.dateOnly(dateTime).microsecondsSinceEpoch)
-      .snapshots();
-}
-
-Future<void> deleteTaskFromFirestore(String? id) {
-  return getTasksCollection().doc(id).delete();
-}
-
-Future<void> updateTaskInFirestore(TaskData task) {
-  return getTasksCollection().doc(task.id).update(task.toJson());
 }
