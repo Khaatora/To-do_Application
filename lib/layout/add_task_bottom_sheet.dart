@@ -41,8 +41,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 TextFormField(
                     controller: titleController,
                     validator: (value) {
-                      if (value!.isEmpty)
+                      if (value!.isEmpty) {
                         return AppLocalizations.of(context)!.pleaseEnterTitle;
+                      }
                     },
                     decoration: InputDecoration(
                       label: Text(AppLocalizations.of(context)!.title),
@@ -58,9 +59,10 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     keyboardType: TextInputType.multiline,
                     controller: descriptionController,
                     validator: (value) {
-                      if (value!.isEmpty)
+                      if (value!.isEmpty) {
                         return AppLocalizations.of(context)!
                             .pleaseEnterDescription;
+                      }
                     },
                     decoration: InputDecoration(
                       label: Text(AppLocalizations.of(context)!.description),

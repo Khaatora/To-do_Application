@@ -23,5 +23,8 @@
   "pleaseEnterDescription": "Please Enter Description",
   "somethingWentWrong": "Something Went Wrong",
   "edit": "Edit",
-  "delete": "Delete"
+  "delete": "Delete",
+  "pleaseEnterNewTitle": "Please Enter New Title",
+  "pleaseEnterNewDescription": "Please Enter New Description",
+  "taskEditedSuccessfully": "Task Edited Successfully"
 }
