@@ -6,10 +6,10 @@ import 'package:todo_own/modules/tasks/edit_task/edit_task_screen.dart';
 import 'package:todo_own/modules/tasks/tasks_provider/task_item_provider.dart';
 import 'package:todo_own/shared/network/local/firebase_utils.dart';
 import 'package:todo_own/shared/styles/colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TaskItem extends StatelessWidget {
   TaskData task;
-
   TaskItem(this.task);
 
   @override
@@ -29,7 +29,7 @@ class TaskItem extends StatelessWidget {
               },
               backgroundColor: Colors.red,
               icon: Icons.delete,
-              label: "Delete",
+              label: AppLocalizations.of(context)!.delete,
             )
           ]),
           endActionPane: ActionPane(motion: const ScrollMotion(), children: [
@@ -41,7 +41,7 @@ class TaskItem extends StatelessWidget {
               },
               backgroundColor: colorLightBlue,
               icon: Icons.edit,
-              label: "Edit",
+              label: AppLocalizations.of(context)!.edit,
             )
           ]),
           child: Container(
@@ -66,7 +66,7 @@ class TaskItem extends StatelessWidget {
                     children: [
                       Text(task.title!),
                       Text(task.description!),
-                      Text("${task.time}")
+                      TimeText(context, task.time!)
                     ],
                   ),
                 ),
@@ -95,5 +95,13 @@ class TaskItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget TimeText(BuildContext context, String time) {
+    if (Localizations.localeOf(context).toLanguageTag() == "en") {
+      return Text(time.replaceFirst("ص", "AM").replaceFirst("م", "PM"));
+    } else {
+      return Text(time.replaceFirst("AM", "ص").replaceFirst("PM", "م"));
+    }
   }
 }

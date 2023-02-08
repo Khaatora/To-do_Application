@@ -3,9 +3,9 @@ import 'package:todo_own/models/task.dart';
 import 'package:todo_own/shared/components/component.dart';
 import 'package:todo_own/shared/network/local/firebase_utils.dart';
 import 'package:todo_own/shared/styles/colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
-
   @override
   State<AddTaskBottomSheet> createState() => _AddTaskBottomSheetState();
 }
@@ -32,7 +32,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text("Add New Task",
+                Text(AppLocalizations.of(context)!.addNewTask,
                     style: Theme.of(context).textTheme.subtitle1),
                 const SizedBox(
                   height: 15,
@@ -41,11 +41,12 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 TextFormField(
                     controller: titleController,
                     validator: (value) {
-                      if (value!.isEmpty) return "please enter title";
+                      if (value!.isEmpty)
+                        return AppLocalizations.of(context)!.pleaseEnterTitle;
                     },
-                    decoration: const InputDecoration(
-                      label: Text("Title"),
-                      enabledBorder: OutlineInputBorder(
+                    decoration: InputDecoration(
+                      label: Text(AppLocalizations.of(context)!.title),
+                      enabledBorder: const OutlineInputBorder(
                           borderSide:
                               BorderSide(color: colorLightBlue, width: 3)),
                     )),
@@ -57,11 +58,13 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     keyboardType: TextInputType.multiline,
                     controller: descriptionController,
                     validator: (value) {
-                      if (value!.isEmpty) return "please enter desc";
+                      if (value!.isEmpty)
+                        return AppLocalizations.of(context)!
+                            .pleaseEnterDescription;
                     },
-                    decoration: const InputDecoration(
-                      label: Text("Description"),
-                      enabledBorder: OutlineInputBorder(
+                    decoration: InputDecoration(
+                      label: Text(AppLocalizations.of(context)!.description),
+                      enabledBorder: const OutlineInputBorder(
                           borderSide:
                               BorderSide(color: colorLightBlue, width: 3)),
                     )),
@@ -78,7 +81,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                             showDPicker(context);
                           },
                           child: Text(
-                            "Select Date",
+                            AppLocalizations.of(context)!.selectDate,
                             textAlign: TextAlign.left,
                             style: Theme.of(context)
                                 .textTheme
@@ -107,7 +110,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                             showTPicker(context);
                           },
                           child: Text(
-                            "Select Time",
+                            AppLocalizations.of(context)!.selectTime,
                             textAlign: TextAlign.left,
                             style: Theme.of(context)
                                 .textTheme
@@ -144,29 +147,36 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                             date: DateUtils.dateOnly(selectedDate)
                                 .microsecondsSinceEpoch,
                             time: TimeOfDay.fromDateTime(selectedDate)
-                                .format(context));
+                                .format(context)
+                                .replaceFirst("ص", "AM")
+                                .replaceFirst("م", "PM"));
                         showMessage(
                           context,
-                          "Are you sure you want to continue?",
-                          "Yes",
+                          AppLocalizations.of(context)!.areYouSure,
+                          AppLocalizations.of(context)!.yes,
                           () {
                             popNavigator(context);
                             showLoading(
-                                context, "Adding task, Please wait", false);
+                                context,
+                                AppLocalizations.of(context)!.loadingPleaseWait,
+                                false);
                             addTaskToDatabase(taskData);
                             hideLoading(context);
                             showMessage(
-                                context, "Task Added Successfully", "Ok", () {
+                                context,
+                                AppLocalizations.of(context)!
+                                    .taskAddedSuccessfully,
+                                AppLocalizations.of(context)!.ok, () {
                               popNavigator(context);
                             });
                           },
-                          negBtn: "cancel",
+                          negBtn: AppLocalizations.of(context)!.cancel,
                           negAction: () => popNavigator(context),
                         );
                       }
                     },
                     child: Text(
-                      "Add Task",
+                      AppLocalizations.of(context)!.addTask,
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme

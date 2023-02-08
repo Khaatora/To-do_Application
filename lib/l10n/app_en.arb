@@ -1,5 +1,27 @@
 {
   "english": "English",
   "arabic": "Arabic",
-  "language": "Language"
+  "language": "Language",
+  "tasks": "Tasks",
+  "addNewTask": "Add New Task",
+  "title": "Title",
+  "description": "Description",
+  "selectDate": "Date",
+  "selectTime": "Time",
+  "addTask": "Add Task",
+  "saveChanges": "Save Changes",
+  "emptyListSentence": "No tasks are added for this day",
+  "settings": "Settings",
+  "areYouSure": "Are you sure you want to continue",
+  "yes": "Yes",
+  "cancel": "Cancel",
+  "loadingPleaseWait": "Adding data, Please wait",
+  "taskAddedSuccessfully": "Task added successfully",
+  "ok": "ok",
+  "editTask": "Edit Task",
+  "pleaseEnterTitle": "Please Enter Title",
+  "pleaseEnterDescription": "Please Enter Description",
+  "somethingWentWrong": "Something Went Wrong",
+  "edit": "Edit",
+  "delete": "Delete"
 }
