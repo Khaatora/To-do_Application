@@ -1,5 +1,27 @@
 {
   "english": "إنجليزي",
   "arabic": "عربي",
-  "language": "اللغة"
+  "language": "اللغة",
+  "tasks": "المهام",
+  "addNewTask": "أضف مهمه جديدة",
+  "title": "عنوان المهمه",
+  "description": "وصف المهمة",
+  "selectDate": "التاريخ",
+  "selectTime": "الوقت",
+  "addTask": "أضف المهمة",
+  "saveChanges": "أحفظ التغييرات",
+  "emptyListSentence": "لا يوجد مهام مضافةاليوم",
+  "settings": "الأعدادات",
+  "areYouSure": "هل أنت متأكد من البيانات؟",
+  "yes": "نعم",
+  "cancel": "لا",
+  "loadingPleaseWait": "يتم اضافة البيانات, برجاء الأنتظار",
+  "taskAddedSuccessfully": "تم الأضافة بنجاح",
+  "ok": "تم",
+  "editTask": "تعديل المهمة",
+  "pleaseEnterTitle": "برجاءأضف عنوان",
+  "pleaseEnterDescription": "برجاء أضف وصف المهمة",
+  "somethingWentWrong": "حدث خطأ ما",
+  "edit": "تعديل",
+  "delete": "مسح"
 }

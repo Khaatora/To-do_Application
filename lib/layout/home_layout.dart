@@ -5,6 +5,7 @@ import 'package:todo_own/layout/home_provider.dart';
 import 'package:todo_own/modules/settings/settings.dart';
 import 'package:todo_own/modules/tasks/task_list/tasks_list.dart';
 import 'package:todo_own/shared/styles/colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeLayout extends StatelessWidget {
   static const String routeName = "Home Layout";
@@ -20,7 +21,9 @@ class HomeLayout extends StatelessWidget {
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           appBar: AppBar(
-            title: const Text("Route Tasks"),
+            title: Text(homeProvider.currentIndex == 0
+                ? AppLocalizations.of(context)!.tasks
+                : AppLocalizations.of(context)!.settings),
           ),
           body: tabs[homeProvider.currentIndex],
           floatingActionButton: FloatingActionButton(
