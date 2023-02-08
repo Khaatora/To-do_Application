@@ -3,6 +3,7 @@ import 'package:todo_own/models/task.dart';
 import 'package:todo_own/shared/components/component.dart';
 import 'package:todo_own/shared/network/local/firebase_utils.dart';
 import 'package:todo_own/shared/styles/colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditTaskScreen extends StatefulWidget {
   static const String routeName = "Edit_Task_Screen";
@@ -43,7 +44,6 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
         minute: int.parse(taskTime.split(":")[1]));
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Todo List"),
         centerTitle: true,
       ),
       body: Center(
@@ -66,7 +66,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text("Edit Task",
+                      Text(AppLocalizations.of(context)!.editTask,
                           style: Theme.of(mainContext).textTheme.subtitle1),
                       const SizedBox(
                         height: 15,
@@ -75,11 +75,14 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                       TextFormField(
                           controller: titleController,
                           validator: (value) {
-                            if (value!.isEmpty) return "please enter new title";
+                            if (value!.isEmpty) {
+                              return AppLocalizations.of(context)!
+                                  .pleaseEnterNewTitle;
+                            }
                           },
-                          decoration: const InputDecoration(
-                            label: Text("Title"),
-                            enabledBorder: OutlineInputBorder(
+                          decoration: InputDecoration(
+                            label: Text(AppLocalizations.of(context)!.title),
+                            enabledBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: colorLightBlue, width: 3)),
                           )),
@@ -91,12 +94,15 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                           keyboardType: TextInputType.multiline,
                           controller: descriptionController,
                           validator: (value) {
-                            if (value!.isEmpty)
-                              return "please enter description";
+                            if (value!.isEmpty) {
+                              return AppLocalizations.of(context)!
+                                  .pleaseEnterNewDescription;
+                            }
                           },
-                          decoration: const InputDecoration(
-                            label: Text("Description"),
-                            enabledBorder: OutlineInputBorder(
+                          decoration: InputDecoration(
+                            label:
+                                Text(AppLocalizations.of(context)!.description),
+                            enabledBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: colorLightBlue, width: 3)),
                           )),
@@ -113,7 +119,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                                   showDPicker(mainContext, widget.task.date!);
                                 },
                                 child: Text(
-                                  "Select Date",
+                                  AppLocalizations.of(context)!.selectDate,
                                   textAlign: TextAlign.left,
                                   style: Theme.of(mainContext)
                                       .textTheme
@@ -144,7 +150,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                                   showTPicker(mainContext, widget.task.time!);
                                 },
                                 child: Text(
-                                  "Select Time",
+                                  AppLocalizations.of(context)!.selectTime,
                                   textAlign: TextAlign.left,
                                   style: Theme.of(mainContext)
                                       .textTheme
@@ -188,27 +194,32 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                                   isDone: widget.task.isDone);
                               showMessage(
                                 mainContext,
-                                "Are you sure you want to continue?",
-                                "Yes",
+                                AppLocalizations.of(context)!.areYouSure,
+                                AppLocalizations.of(context)!.yes,
                                 () {
                                   popNavigator(mainContext);
-                                  showLoading(mainContext,
-                                      "Saving Changes, Please wait", false);
+                                  showLoading(
+                                      mainContext,
+                                      AppLocalizations.of(context)!.saveChanges,
+                                      false);
                                   updateTaskInFirestore(taskData);
                                   hideLoading(mainContext);
-                                  showMessage(mainContext,
-                                      "Task Edited Successfully", "Ok", () {
+                                  showMessage(
+                                      mainContext,
+                                      AppLocalizations.of(context)!
+                                          .taskEditedSuccessfully,
+                                      AppLocalizations.of(context)!.ok, () {
                                     popNavigator(context);
                                     popNavigator(context);
                                   });
                                 },
-                                negBtn: "cancel",
+                                negBtn: AppLocalizations.of(context)!.cancel,
                                 negAction: () => popNavigator(mainContext),
                               );
                             }
                           },
                           child: Text(
-                            "Save Changes",
+                            AppLocalizations.of(context)!.saveChanges,
                             textAlign: TextAlign.center,
                             style: Theme.of(mainContext)
                                 .textTheme

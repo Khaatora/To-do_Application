@@ -9,7 +9,7 @@
   "selectDate": "التاريخ",
   "selectTime": "الوقت",
   "addTask": "أضف المهمة",
-  "saveChanges": "أحفظ التغييرات",
+  "saveChanges": "حفظ التغييرات",
   "emptyListSentence": "لا يوجد مهام مضافةاليوم",
   "settings": "الأعدادات",
   "areYouSure": "هل أنت متأكد من البيانات؟",
@@ -23,5 +23,8 @@
   "pleaseEnterDescription": "برجاء أضف وصف المهمة",
   "somethingWentWrong": "حدث خطأ ما",
   "edit": "تعديل",
-  "delete": "مسح"
+  "delete": "مسح",
+  "pleaseEnterNewTitle": "برجاءأضف عنوان جديد",
+  "pleaseEnterNewDescription": "برجاء أضف وصف المهمة الجديد",
+  "taskEditedSuccessfully": "تم التعديل بنجاح"
 }
