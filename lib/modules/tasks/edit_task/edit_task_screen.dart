@@ -19,18 +19,24 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
-  DateTime selectedDate = DateTime.now();
+  late DateTime selectedDate;
 
-  TimeOfDay selectedTime = TimeOfDay.now();
+  late TimeOfDay selectedTime;
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   late String taskTime;
-  late TimeOfDay taskTimeOfDay;
+  late String period;
 
   @override
   void initState() {
     taskTime = widget.task.time!.substring(0, widget.task.time!.length - 3);
+    period = widget.task.time!
+        .substring(widget.task.time!.length - 2, widget.task.time!.length);
+    selectedDate = DateTime.fromMicrosecondsSinceEpoch(widget.task.date!);
+    selectedTime = TimeOfDay(
+        hour: int.parse(taskTime.split(":")[0]) + (period == "PM" ? 12 : 0),
+        minute: int.parse(taskTime.split(":")[1]));
     titleController.text = widget.task.title!;
     descriptionController.text = widget.task.description!;
     super.initState();
@@ -39,9 +45,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   @override
   Widget build(BuildContext mainContext) {
     var mediaQuery = MediaQuery.of(mainContext);
-    taskTimeOfDay = TimeOfDay(
-        hour: int.parse(taskTime.split(":")[0]),
-        minute: int.parse(taskTime.split(":")[1]));
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -147,7 +151,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  showTPicker(mainContext, widget.task.time!);
+                                  showTPicker(mainContext);
                                 },
                                 child: Text(
                                   AppLocalizations.of(context)!.selectTime,
@@ -160,7 +164,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  showTPicker(mainContext, widget.task.time!);
+                                  showTPicker(mainContext);
                                 },
                                 child: Text(selectedTime.format(mainContext),
                                     style: Theme.of(mainContext)
@@ -251,10 +255,10 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   }
 
   //showTimePicker
-  void showTPicker(BuildContext context, String time) async {
+  void showTPicker(BuildContext context) async {
     unFocusKeyboardFromScope();
     TimeOfDay? chosenTime =
-        await showTimePicker(context: context, initialTime: taskTimeOfDay);
+        await showTimePicker(context: context, initialTime: selectedTime);
     if (chosenTime == null) return;
     setState(() {
       selectedTime = chosenTime;
