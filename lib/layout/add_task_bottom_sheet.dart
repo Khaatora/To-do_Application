@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_own/models/task.dart';
 import 'package:todo_own/shared/components/component.dart';
-import 'package:todo_own/shared/network/local/firebase_utils.dart';
+import 'package:todo_own/shared/network/local/sqflite_utils.dart';
 import 'package:todo_own/shared/styles/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -11,13 +11,29 @@ class AddTaskBottomSheet extends StatefulWidget {
 }
 
 class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
-  var titleController = TextEditingController();
-  var descriptionController = TextEditingController();
+  late TextEditingController titleController;
+  late TextEditingController descriptionController;
+  late final SqfliteUtils sqfliteUtils;
 
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    titleController = TextEditingController();
+    descriptionController = TextEditingController();
+    sqfliteUtils = SqfliteUtils();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    descriptionController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +71,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   height: 15,
                 ),
                 TextFormField(
-                    maxLines: null,
+                    minLines: 1,
+                    maxLines: 3,
                     keyboardType: TextInputType.multiline,
                     controller: descriptionController,
                     validator: (value) {
@@ -63,6 +80,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                         return AppLocalizations.of(context)!
                             .pleaseEnterDescription;
                       }
+                      return null;
                     },
                     decoration: InputDecoration(
                       label: Text(AppLocalizations.of(context)!.description),
@@ -143,26 +161,27 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         unFocusKeyboardFromScope();
-                        TaskData taskData = TaskData(
-                            title: titleController.text,
-                            description: descriptionController.text,
-                            date: DateUtils.dateOnly(selectedDate)
-                                .microsecondsSinceEpoch,
-                            time: TimeOfDay.fromDateTime(selectedDate)
-                                .format(context)
-                                .replaceFirst("ص", "AM")
-                                .replaceFirst("م", "PM"));
                         showMessage(
                           context,
                           AppLocalizations.of(context)!.areYouSure,
                           AppLocalizations.of(context)!.yes,
                           () {
+                            TaskData taskData = TaskData(
+                                title: titleController.text,
+                                description: descriptionController.text,
+                                date: DateUtils.dateOnly(selectedDate)
+                                    .microsecondsSinceEpoch,
+                                time: TimeOfDay.fromDateTime(selectedDate)
+                                    .format(context)
+                                    .replaceFirst("ص", "AM")
+                                    .replaceFirst("م", "PM"));
                             popNavigator(context);
                             showLoading(
                                 context,
                                 AppLocalizations.of(context)!.loadingPleaseWait,
                                 false);
-                            addTaskToDatabase(taskData);
+                            // addTaskToDatabase(taskData);
+                            sqfliteUtils.createTask(taskData: taskData);
                             hideLoading(context);
                             showMessage(
                                 context,

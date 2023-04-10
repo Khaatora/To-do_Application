@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:todo_own/models/task.dart';
 import 'package:todo_own/modules/settings/settings_provider/settings_provider.dart';
 import 'package:todo_own/shared/network/local/firebase_utils.dart';
+import 'package:todo_own/shared/network/local/sqflite_utils.dart';
 import 'package:todo_own/shared/styles/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -17,7 +18,21 @@ class TasksListTab extends StatefulWidget {
 
 class _TasksListTabState extends State<TasksListTab> {
   DateTime selectedDate = DateTime.now();
+  late SqfliteUtils sqfliteUtils;
   late SettingsProvider provider;
+
+  @override
+  void initState() {
+    sqfliteUtils = SqfliteUtils();
+    sqfliteUtils.open();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    sqfliteUtils.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

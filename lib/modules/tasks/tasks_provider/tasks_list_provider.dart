@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 class TasksListProvider extends ChangeNotifier {
@@ -5,7 +7,7 @@ class TasksListProvider extends ChangeNotifier {
 
   void changeCurrentDate(DateTime selectedDate) {
     this.selectedDate = selectedDate;
-    print(selectedDate);
+    log("$selectedDate");
     notifyListeners();
   }
 }

@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:todo_own/layout/add_task_bottom_sheet.dart';
 import 'package:todo_own/layout/home_provider.dart';
 import 'package:todo_own/modules/settings/settings.dart';
-import 'package:todo_own/modules/tasks/task_list/tasks_list.dart';
+import 'package:todo_own/modules/tasks/task_list/tasks_list_sqflite.dart';
 import 'package:todo_own/shared/styles/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

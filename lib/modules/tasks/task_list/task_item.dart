@@ -4,13 +4,16 @@ import 'package:provider/provider.dart';
 import 'package:todo_own/models/task.dart';
 import 'package:todo_own/modules/tasks/edit_task/edit_task_screen.dart';
 import 'package:todo_own/modules/tasks/tasks_provider/task_item_provider.dart';
-import 'package:todo_own/shared/network/local/firebase_utils.dart';
+import 'package:todo_own/shared/network/local/sqflite_utils.dart';
 import 'package:todo_own/shared/styles/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TaskItem extends StatelessWidget {
   TaskData task;
+
   TaskItem(this.task);
+
+  SqfliteUtils sqfliteUtils = SqfliteUtils();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,8 @@ class TaskItem extends StatelessWidget {
             SlidableAction(
               borderRadius: BorderRadius.circular(12),
               onPressed: (context) {
-                deleteTaskFromFirestore(task.id);
+                // deleteTaskFromFirestore(task.id);
+                sqfliteUtils.deleteTask(id: task.id!);
               },
               backgroundColor: Colors.red,
               icon: Icons.delete,
@@ -81,7 +85,8 @@ class TaskItem extends StatelessWidget {
                         TaskItemProvider provider =
                             Provider.of<TaskItemProvider>(context,
                                 listen: false);
-                        provider.onStatusChanged(task.id!, !task.isDone!);
+                        // provider.onStatusChanged(task.id!, !task.isDone!);
+                        provider.onStatusChangedSqflite(task);
                       },
                       icon: Icon(
                         task.isDone! ? Icons.done : Icons.close,

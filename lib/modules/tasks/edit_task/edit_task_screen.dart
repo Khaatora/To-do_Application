@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:todo_own/models/task.dart';
 import 'package:todo_own/shared/components/component.dart';
-import 'package:todo_own/shared/network/local/firebase_utils.dart';
 import 'package:todo_own/shared/styles/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../shared/network/local/sqflite_utils.dart';
+
 class EditTaskScreen extends StatefulWidget {
   static const String routeName = "Edit_Task_Screen";
+
   TaskData task;
 
   EditTaskScreen(this.task);
@@ -18,6 +20,8 @@ class EditTaskScreen extends StatefulWidget {
 class _EditTaskScreenState extends State<EditTaskScreen> {
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+
+  late SqfliteUtils sqfliteUtils;
 
   late DateTime selectedDate;
 
@@ -39,6 +43,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
         minute: int.parse(taskTime.split(":")[1]));
     titleController.text = widget.task.title!;
     descriptionController.text = widget.task.description!;
+    sqfliteUtils = SqfliteUtils();
     super.initState();
   }
 
@@ -188,25 +193,26 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                           onPressed: () {
                             if (formKey.currentState!.validate()) {
                               unFocusKeyboardFromScope();
-                              TaskData taskData = TaskData(
-                                  id: widget.task.id,
-                                  title: titleController.text,
-                                  description: descriptionController.text,
-                                  date: DateUtils.dateOnly(selectedDate)
-                                      .microsecondsSinceEpoch,
-                                  time: selectedTime.format(mainContext),
-                                  isDone: widget.task.isDone);
                               showMessage(
                                 mainContext,
                                 AppLocalizations.of(context)!.areYouSure,
                                 AppLocalizations.of(context)!.yes,
                                 () {
+                                  TaskData taskData = TaskData(
+                                      id: widget.task.id,
+                                      title: titleController.text,
+                                      description: descriptionController.text,
+                                      date: DateUtils.dateOnly(selectedDate)
+                                          .microsecondsSinceEpoch,
+                                      time: selectedTime.format(mainContext),
+                                      isDone: widget.task.isDone);
                                   popNavigator(mainContext);
                                   showLoading(
                                       mainContext,
                                       AppLocalizations.of(context)!.saveChanges,
                                       false);
-                                  updateTaskInFirestore(taskData);
+                                  // updateTaskInFirestore(taskData);
+                                  sqfliteUtils.updateTask(taskData: taskData);
                                   hideLoading(mainContext);
                                   showMessage(
                                       mainContext,
