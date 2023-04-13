@@ -248,9 +248,11 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   //showDatePicker
   void showDPicker(BuildContext context, int date) async {
     unFocusKeyboardFromScope();
+    DateTime now = DateTime.now();
+    DateTime dateTime = DateTime.fromMicrosecondsSinceEpoch(date);
     DateTime? chosenDate = await showDatePicker(
         context: context,
-        initialDate: DateTime.fromMicrosecondsSinceEpoch(date),
+        initialDate: date < now.microsecondsSinceEpoch ? now : dateTime,
         firstDate: DateTime.now(),
         lastDate: DateTime.now().add(const Duration(days: 365)));
     if (chosenDate == null) return;
